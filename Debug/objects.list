@@ -1,0 +1,6 @@
+"drivers/.metadata/.plugins/org.eclipse.cdt.make.core/specs.o"
+"drivers/src/stm32f103c8t6_gpio_driver.o"
+"drivers/src/stm32f103c8t6_timer_driver.o"
+"src/main.o"
+"startup/startup_stm32.o"
+"startup/sysmem.o"
