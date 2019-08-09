@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stddef.h>
 
+//TODO set unused pins as inputs with pull-down resistors
 
 /*
  * B10	- segA
