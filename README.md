@@ -25,7 +25,7 @@ Main Control Unit's memory may be flashed in several ways:
 ## Inspiration
 To create hardware, sofware and firmware from scratch - at start I found it easy, but time consuming. My initial idea was right just with the second point. Underneath are the books, that helped my to go through this project:
 
-Robert C. Martin ,,Clean Code" - main inspiration, main source of knowledge;
-James Grenning ,,Test-Driven Development for Embedded C" - even though no test framework was used in this project I still found this book really usefull and inspiring. Looking forward to finish it soon and start a project with ideas that stand behind TDD. 
+* Robert C. Martin ,,Clean Code" - main inspiration, main source of knowledge;
+* James Grenning ,,Test-Driven Development for Embedded C" - even though no test framework was used in this project I still found this book really usefull and inspiring. Looking forward to finish it soon and start a project with ideas that stand behind TDD. 
 ## Contact
 Created by Paweł Klisz @ pawelochojec@gmail.com- feel free to contact me!
