@@ -10,78 +10,22 @@
 
 #include <stdint.h>
 
-/*****************************************************************
- * ******************** BASE ADDRESSES DEFINES********************
- *****************************************************************/
-
-/*
- * Busses addresses
- */
-#define APB1_BASE_ADDR			0x40000000
-#define APB2_BASE_ADDR			0x40010000
-#define AHB_BASE_ADDR			0x40018000
-#define SRAM_BASE_ADDR			0x20000000
-#define FLASH_BASE_ADDR			0x08000000
-
-
-
-/*
- * RCC Base Address
- */
-#define RCC_BASE_ADDR			(AHB_BASE_ADDR + 0x9000)
-
-
-
-/*
- * GPIO Base Addresses
- */
-#define GPIOA_BASE_ADDR			(APB2_BASE_ADDR + 0x800)
-#define GPIOB_BASE_ADDR			(APB2_BASE_ADDR + 0xC00)
-#define GPIOC_BASE_ADDR			(APB2_BASE_ADDR + 0x1000)
-#define GPIOD_BASE_ADDR			(APB2_BASE_ADDR + 0x1400)
-#define GPIOE_BASE_ADDR			(APB2_BASE_ADDR + 0x1800)
-
-
-
-/*
- * EXTI Base Addresses
- */
-#define EXTI_BASE_ADDR			(APB2_BASE_ADDR + 0x400)
-
-
-
-/*
- * NVIC Base addresses
- */
-
-#define NVIC_ISER0_BASEADDR		0xE000E100						//DOCUMENTATION PM0056
-#define NVIC_ISER1_BASEADDR		(NVIC_ISER0_BASEADDR + 0x04)
-#define NVIC_ISER2_BASEADDR		(NVIC_ISER0_BASEADDR + 0x08)
-
-#define NVIC_ICER0_BASEADDR		(NVIC_ISER0_BASEADDR + 0x80)
-#define NVIC_ICER1_BASEADDR		(NVIC_ISER0_BASEADDR + 0x84)
-#define NVIC_ICER2_BASEADDR		(NVIC_ISER0_BASEADDR + 0x88)
-
-/*
- * TIMER Base Addresses
- */
-#define TIM2_BASE_ADDR			(APB1_BASE_ADDR)
-#define TIM3_BASE_ADDR			(APB1_BASE_ADDR + 0x0400)
-#define TIM6_BASE_ADDR			(APB1_BASE_ADDR + 0x1000)	//BASIC TIMER
-#define TIM7_BASE_ADDR			(APB1_BASE_ADDR + 0x1400)	//BASIC TIMER
-
-
-
-
-
-
-
 /******************************************************************
- * **************** HANDLE STRUCTURES DEFINES *********************
+ * **************** Generic macros ********************************
  ******************************************************************/
 
-typedef struct
-{
+#define F_CPU					8000000		//CPU frequency is 8MHz
+#define ENABLE					1
+#define DISABLE					0
+#define SET_PNP					0
+#define RESET_PNP				1
+#define ENABLE_PIN_PULLUP		ENABLE
+
+/******************************************************************
+ * **************** Structures defines ****************************
+ ******************************************************************/
+
+typedef struct{
 	volatile uint32_t CR;
 	volatile uint32_t CFGR;
 	volatile uint32_t CIR;
@@ -96,9 +40,7 @@ typedef struct
 	volatile uint32_t CFGR2;
 }RCC_RegDef_t;
 
-
-typedef struct
-{
+typedef struct{
 	volatile uint32_t CRL;
 	volatile uint32_t CRH;
 	volatile uint32_t IDR;
@@ -108,8 +50,7 @@ typedef struct
 	volatile uint32_t LCKR;
 }GPIO_RegDef_t;
 
-typedef struct
-{
+typedef struct{
 	volatile uint32_t CR1;
 	volatile uint32_t CR2;
 	volatile uint32_t reserved;
@@ -119,11 +60,10 @@ typedef struct
 	volatile uint32_t reserved2[3];
 	volatile uint32_t CNT;
 	volatile uint32_t PSC;
-	volatile uint32_t ARR;		//AUTORELOAD REGISTER
+	volatile uint32_t ARR;
 }TIMER6_7_RegDef_t;
 
-typedef struct
-{
+typedef struct{
 	volatile uint32_t CR1;
 	volatile uint32_t CR2;
 	volatile uint32_t SMCR;
@@ -135,7 +75,7 @@ typedef struct
 	volatile uint32_t CCER;
 	volatile uint32_t CNT;
 	volatile uint32_t PSC;
-	volatile uint32_t ARR;		//AUTORELOAD REGISTER
+	volatile uint32_t ARR;
 	volatile uint32_t reserved1;
 	volatile uint32_t CCR1;
 	volatile uint32_t CCR2;
@@ -146,8 +86,7 @@ typedef struct
 	volatile uint32_t DMAR;
 }TIMER2_5_RegDef_t;
 
-typedef struct
-{
+typedef struct{
 	volatile uint32_t IMR;
 	volatile uint32_t EMR;
 	volatile uint32_t RTSR;
@@ -157,7 +96,7 @@ typedef struct
 }EXTI_RegDef_t;
 
 /******************************************************************
- * **************** GPIO Macros ************************************
+ * **************** Pointers to peripherals ***********************
  ******************************************************************/
 
 #define GPIOA					((GPIO_RegDef_t*)GPIOA_BASE_ADDR)
@@ -166,46 +105,12 @@ typedef struct
 #define GPIOD					((GPIO_RegDef_t*)GPIOD_BASE_ADDR)
 #define GPIOE					((GPIO_RegDef_t*)GPIOE_BASE_ADDR)
 
-
-
-
-
-/******************************************************************
- * **************** RCC Functions *********************************
- ******************************************************************/
-#define RCC_APB2ENR_IOPAEN		2
-#define RCC_APB2ENR_IOPBEN		3
-#define RCC_APB2ENR_IOPCEN		4
-#define RCC_APB2ENR_IOPDEN		5
-#define RCC_APB2ENR_IOPEEN		6
-
-#define RCC_APB1ENR_TIMER2		0
-#define RCC_APB1ENR_TIMER3		1
-#define RCC_APB1ENR_TIMER6		4
-#define RCC_APB1ENR_TIMER7		5
-
-
-#define RCC_APB1RSTR_TIMER2		0
-#define RCC_APB1RSTR_TIMER3		1
-#define RCC_APB1RSTR_TIMER6		4
-#define RCC_APB1RSTR_TIMER7		5
-
-#define RCC_APB2ENR_EXTI
-
 #define RCC 					((RCC_RegDef_t*)RCC_BASE_ADDR)
 
 #define TIMER2					((TIMER2_5_RegDef_t*)TIM2_BASE_ADDR)
 #define TIMER3					((TIMER2_5_RegDef_t*)TIM3_BASE_ADDR)
 #define TIMER6					((TIMER6_7_RegDef_t*)TIM6_BASE_ADDR)
 #define TIMER7					((TIMER6_7_RegDef_t*)TIM7_BASE_ADDR)
-
-
-
-
-
-/****************************************************************
- * ****************** NVIC and EXTI pointers *****************************
- ****************************************************************/
 
 #define NVIC_ISER0				((volatile uint32_t*)NVIC_ISER0_BASEADDR)
 #define NVIC_ISER1				((volatile uint32_t*)NVIC_ISER1_BASEADDR)
@@ -217,43 +122,38 @@ typedef struct
 
 #define EXTI_POINTER			((EXTI_RegDef_t*)EXTI_BASE_ADDR)
 
+/*****************************************************************
+ * ******************** BASE ADDRESSES DEFINES *******************
+ *****************************************************************/
 
+#define APB1_BASE_ADDR			0x40000000
+#define APB2_BASE_ADDR			0x40010000
+#define AHB_BASE_ADDR			0x40018000
+#define SRAM_BASE_ADDR			0x20000000
+#define FLASH_BASE_ADDR			0x08000000
 
-/***************************************************
- * ******************* IRQ numbers******************
- ***************************************************/
+#define RCC_BASE_ADDR			(AHB_BASE_ADDR + 0x9000)
 
+#define GPIOA_BASE_ADDR			(APB2_BASE_ADDR + 0x800)
+#define GPIOB_BASE_ADDR			(APB2_BASE_ADDR + 0xC00)
+#define GPIOC_BASE_ADDR			(APB2_BASE_ADDR + 0x1000)
+#define GPIOD_BASE_ADDR			(APB2_BASE_ADDR + 0x1400)
+#define GPIOE_BASE_ADDR			(APB2_BASE_ADDR + 0x1800)
 
-#define IRQ_TIMER2				28
-#define IRQ_TIMER3				29
-#define IRQ_TIMER6				54
-#define IRQ_TIMER7				55
-#define IRQ_EXTI0				6
-#define IRQ_EXTI1				7
-#define IRQ_EXTI2				8
-#define IRQ_EXTI3				9
-#define IRQ_EXTI4				10
-#define IRQ_EXTI9_5				23
-#define IRQ_EXTI15_10			40
+#define EXTI_BASE_ADDR			(APB2_BASE_ADDR + 0x400)
 
+#define NVIC_ISER0_BASEADDR		0xE000E100
+#define NVIC_ISER1_BASEADDR		(NVIC_ISER0_BASEADDR + 0x04)
+#define NVIC_ISER2_BASEADDR		(NVIC_ISER0_BASEADDR + 0x08)
 
+#define NVIC_ICER0_BASEADDR		(NVIC_ISER0_BASEADDR + 0x80)
+#define NVIC_ICER1_BASEADDR		(NVIC_ISER0_BASEADDR + 0x84)
+#define NVIC_ICER2_BASEADDR		(NVIC_ISER0_BASEADDR + 0x88)
 
-/***************************************************
- * ******************* IRQ numbers******************
- ***************************************************/
+#define TIM2_BASE_ADDR			(APB1_BASE_ADDR)
+#define TIM3_BASE_ADDR			(APB1_BASE_ADDR + 0x0400)
+#define TIM6_BASE_ADDR			(APB1_BASE_ADDR + 0x1000)
+#define TIM7_BASE_ADDR			(APB1_BASE_ADDR + 0x1400)
 
-#define EXTI_IMR_FTSR				0
-#define EXTI_IMR_RTSR				1
-
-
-/*****************************************************
- * *********** Generic macros*************************
- *****************************************************/
-
-#define F_CPU					8000000		//CPU frequency is 8MHz
-#define ENABLE					1
-#define DISABLE					0
-#define SET_PNP					0
-#define RESET_PNP				1
 
 #endif /* INC_STM32F103C8T6_H_ */

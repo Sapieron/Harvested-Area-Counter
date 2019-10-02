@@ -4,16 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../drivers/src/stm32f103c8t6_gpio_driver.c \
-../drivers/src/stm32f103c8t6_timer_driver.c 
+../drivers/src/stm32f103c8t6_gpio.c \
+../drivers/src/stm32f103c8t6_interrupt.c \
+../drivers/src/stm32f103c8t6_rcc.c \
+../drivers/src/stm32f103c8t6_timer.c 
 
 OBJS += \
-./drivers/src/stm32f103c8t6_gpio_driver.o \
-./drivers/src/stm32f103c8t6_timer_driver.o 
+./drivers/src/stm32f103c8t6_gpio.o \
+./drivers/src/stm32f103c8t6_interrupt.o \
+./drivers/src/stm32f103c8t6_rcc.o \
+./drivers/src/stm32f103c8t6_timer.o 
 
 C_DEPS += \
-./drivers/src/stm32f103c8t6_gpio_driver.d \
-./drivers/src/stm32f103c8t6_timer_driver.d 
+./drivers/src/stm32f103c8t6_gpio.d \
+./drivers/src/stm32f103c8t6_interrupt.d \
+./drivers/src/stm32f103c8t6_rcc.d \
+./drivers/src/stm32f103c8t6_timer.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

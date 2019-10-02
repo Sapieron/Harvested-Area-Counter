@@ -9,14 +9,22 @@
 #define INC_STM32F103C8T6_RCC_H_
 
 #include <stm32f103c8t6.h>
+#include <stm32f103c8t6_gpio.h>
 
-//TODO dodac funkcje rcc tutaj
+/******************************************************************************************
+ ********************************* Main functions *****************************************
+ ******************************************************************************************/
+void RCCEnableGPIOClock(GPIO_Handle_t *pGPIOHandle);
+void RCC_ResetTimerClock(uint8_t RCC_APB1RSTR_Timer);
+void RCC_SetTimerClock(uint8_t RCC_APB1RSTR_Timer);
+void RCC_SetAFIOClockOn();
+
+/******************************************************************************************
+ ********************************* RCC specific defines ***********************************
+ ******************************************************************************************/
 
 
-/******************************************************************
- * **************** RCC Functions *********************************
- ******************************************************************/
-
+#define RCC_APB2ENR_AFIOEN		0
 #define RCC_APB2ENR_IOPAEN		2
 #define RCC_APB2ENR_IOPBEN		3
 #define RCC_APB2ENR_IOPCEN		4

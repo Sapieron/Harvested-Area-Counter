@@ -18,13 +18,13 @@
  *
  */
 
-#include <stm32f103c8t6.h>
-#include <stm32f103c8t6_gpio_driver.h>
-#include <stm32f103c8t6_timer_driver.h>
 #include <string.h>
 #include <stddef.h>
-
-//TODO set unused pins as inputs with pull-down resistors
+#include <stm32f103c8t6.h>
+#include <stm32f103c8t6_gpio.h>
+#include <stm32f103c8t6_rcc.h>
+#include <stm32f103c8t6_interrupt.h>
+#include <stm32f103c8t6_timer.h>
 
 /*
  * short brief of variables below:
@@ -98,12 +98,12 @@ void Setup(){
 	TIM2_5_Init(&timer2Handle, ENABLE);
 	TIM2_5_Init(&timer3Handle, DISABLE);
 
-	IRQ_ConfigHandling(IRQ_TIMER2, ENABLE);
-	IRQ_ConfigHandling(IRQ_EXTI15_10, ENABLE);
+	IRQ_IRQNumberHandling(IRQ_TIMER2, ENABLE);
+	IRQ_IRQNumberHandling(IRQ_EXTI15_10, ENABLE);
 
 	InitializeSensorPinsIRQs();
 
-	IRQ_ConfigHandling(IRQ_TIMER3, ENABLE);
+	IRQ_IRQNumberHandling(IRQ_TIMER3, ENABLE);
 }
 
 void ClearHandlers(){
@@ -175,7 +175,7 @@ void InitializeSensorPinsIRQs(){
 void TIM3_IRQHandler(void){
 	if(isTimerFlagSet(&timer3Handle)){
 		ClearFlagStatus(&timer3Handle);
-		TimerCounterDisable(&timer3Handle);
+		Timer2_5CounterDisable(&timer3Handle);
 		if(correctOrderOfSwitchingSensors==4){
 			correctOrderOfSwitchingSensors=1;
 			fullSpinsMade++;
@@ -186,13 +186,13 @@ void TIM3_IRQHandler(void){
 void EXTI15_10_IRQHandler(void){
 	SensorHandling(&timer3Handle);
 	if(EXTI_POINTER->PR & (ENABLE << sensorPins[0])){
-		GPIO_IRQHandling(EXTI_POINTER, sensorPins[0]);
+		IRQ_PendingPinInterrupt(EXTI_POINTER, sensorPins[0]);
 		SensorHandler(sensorMask[0]);
 	}else if(EXTI_POINTER->PR & (ENABLE << sensorPins[1])){
-		GPIO_IRQHandling(EXTI_POINTER, sensorPins[1]);
+		IRQ_PendingPinInterrupt(EXTI_POINTER, sensorPins[1]);
 		SensorHandler(sensorMask[1]);
 	}else if(EXTI_POINTER->PR & (ENABLE << sensorPins[2])){
-		GPIO_IRQHandling(EXTI_POINTER, sensorPins[2]);
+		IRQ_PendingPinInterrupt(EXTI_POINTER, sensorPins[2]);
 		SensorHandler(sensorMask[2]);
 	}
 }
