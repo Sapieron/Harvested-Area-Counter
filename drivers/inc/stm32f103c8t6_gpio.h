@@ -55,7 +55,7 @@ void IRQ_PendingPinInterrupt(EXTI_RegDef_t *pEXTI,uint8_t PinNumber);
 												(numOfDigitsnDisplay==1)?1:\
 												(numOfDigitsnDisplay==2)?3:\
 												(numOfDigitsnDisplay==3)?7:\
-												(numOfDigitsnDisplay==4)?15:0)
+												(numOfDigitsnDisplay==4)?519:0)
 
 #define CLEAN_SEGMENTS_BITMASK 					0x6E23
 

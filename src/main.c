@@ -36,7 +36,7 @@
  * 1 [decimal] stands for 0,01 m^2. EXAMPLE: 1885[decimal] means 18,85m^2 will be counted once a full spin was done.
  */
 
-#define NUM_OF_DIGITS_ON_DISPLAY 	3
+#define NUM_OF_DIGITS_ON_DISPLAY 	4
 #define ONE_SPIN					1885
 #define POSITION_OF_DOT				2
 
@@ -131,8 +131,9 @@ void InitializeDigitHandlers(){
 		memset(&digitHandler[i],0,sizeof(digitHandler[i]));
 		digitHandler[i].pGPIOx = GPIOB;
 		digitHandler[i].PinConfig.PinNumber = digitPins[i];
-		digitHandler[i].PinConfig.PinInOrOut = GPIO_PIN_OUTPUT_PP;
+		digitHandler[i].PinConfig.PinInOrOut = GPIO_PIN_OUTPUT_OD;
 		digitHandler[i].PinConfig.PinMode = GPIO_PIN_MODE_OUTPUT2MHZ;
+		GPIO_Init(&digitHandler[i]);
 		GPIO_WriteToOutput(&digitHandler[i],digitPins[i],RESET_PNP);
 	}
 }
@@ -150,7 +151,7 @@ void InitializeSensorHandlers(){
 void InitializeSegmentOfDigitHandlers(){
 	for(uint8_t i =0; i < (sizeof(numberToBitMask)/sizeof(uint16_t)); ++i){
 		segmentOfDigit.pGPIOx = GPIOB;
-		segmentOfDigit.PinConfig.PinInOrOut = GPIO_PIN_OUTPUT_PP;
+		segmentOfDigit.PinConfig.PinInOrOut = GPIO_PIN_OUTPUT_OD;
 		segmentOfDigit.PinConfig.PinMode = GPIO_PIN_MODE_OUTPUT2MHZ;
 		segmentOfDigit.PinConfig.PinNumber = pinToSegment[i];
 		GPIO_Init(&segmentOfDigit);
@@ -161,7 +162,7 @@ void InitializeSegmentOfDigitHandlers(){
 void SensorsEnablePullups(){
 	for(int8_t i = 0; i < (sizeof(sensorsHandler)/sizeof(GPIO_Handle_t)); ++i ){
 		GPIO_Init(&sensorsHandler[i]);
-		GPIO_WriteToOutput(&sensorsHandler[i],sensorPins[i],ENABLE_PIN_PULLUP);
+		GPIO_WriteToOutput(&sensorsHandler[i],sensorPins[i],ENABLE_PIN_PULLUP);		//RM0008 9.1 Table 20
 	}
 }
 
